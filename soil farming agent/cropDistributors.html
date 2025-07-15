@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Distributors</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .distributor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .active-tab {
+            border-bottom: 3px solid #4CAF50;
+            font-weight: 600;
+            color: #4CAF50;
+        }
+        
+        .map-container {
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            position: relative;
+        }
+        
+        .map-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        @media (max-width: 768px) {
+            .distributor-grid {
+                grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header Section -->
+    <header class="bg-green-700 text-white">
+        <div class="container mx-auto px-6 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center mb-6 md:mb-0">
+                    <img src="crops.jpeg" alt="Green wheat stalk logo with circular frame representing agricultural freshness" class="rounded-full mr-4">
+                    <div>
+                        <h1 class="text-3xl font-bold">AgriConnect</h1>
+                        <p class="text-green-200">Connecting farmers with quality distributors</p>
+                    </div>
+                </div>
+                <div class="w-full md:w-auto">
+                    <div class="relative">
+                        <input type="text" placeholder="Search distributors..." class="w-full px-4 py-2 rounded-full bg-green-800 text-white placeholder-green-300 focus:outline-none focus:ring-2 focus:ring-green-500">
+                        <button class="absolute right-3 top-2 text-green-300 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Filter Section -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="flex flex-wrap items-center gap-4">
+                <div class="w-full md:w-auto">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Crop Type</label>
+                    <select class="w-full md:w-48 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                        <option>All Crops</option>
+                        <option>Wheat</option>
+                        <option>Corn</option>
+                        <option>Rice</option>
+                        <option>Soybeans</option>
+                        <option>Vegetables</option>
+                        <option>Fruits</option>
+                    </select>
+                </div>
+                <div class="w-full md:w-auto">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                    <select class="w-full md:w-48 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                        <option>All Regions</option>
+                        <option>North America</option>
+                        <option>South America</option>
+                        <option>Europe</option>
+                        <option>Asia</option>
+                        <option>Africa</option>
+                        <option>Australia</option>
+                    </select>
+                </div>
+                <div class="w-full md:w-auto">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Certification</label>
+                    <select class="w-full md:w-48 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                        <option>All Certifications</option>
+                        <option>Organic</option>
+                        <option>Fair Trade</option>
+                        <option>Non-GMO</option>
+                        <option>Rainforest Alliance</option>
+                    </select>
+                </div>
+                <div class="w-full md:w-auto flex items-end">
+                    <button class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                        Apply Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white rounded-lg shadow-md p-6 flex items-center">
+                <div class="p-3 rounded-full bg-green-100 mr-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-gray-600">Total Distributors</p>
+                    <p class="text-2xl font-bold">1,248</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6 flex items-center">
+                <div class="p-3 rounded-full bg-blue-100 mr-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-gray-600">Countries</p>
+                    <p class="text-2xl font-bold">86</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6 flex items-center">
+                <div class="p-3 rounded-full bg-yellow-100 mr-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-gray-600">Crops Available</p>
+                    <p class="text-2xl font-bold">42</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6 flex items-center">
+                <div class="p-3 rounded-full bg-purple-100 mr-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-gray-600">Certified</p>
+                    <p class="text-2xl font-bold">893</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <div class="border-b border-gray-200 mb-8">
+            <nav class="flex space-x-8" aria-label="Tabs">
+                <button class="py-4 px-1 border-b-2 font-medium text-sm active-tab">
+                    All Distributors
+                </button>
+                <button class="py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    Premium Partners
+                </button>
+                <button class="py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    Newly Listed
+                </button>
+                <button class="py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    Near Me
+                </button>
+            </nav>
+        </div>
+
+        <!-- Distributors Grid -->
+        <div class="distributor-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <!-- Distributor Card 1 -->
+            <div class="distributor-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+                <div class="relative h-48 bg-gray-100">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/e7be4872-8de8-4ac9-bd74-3092355aac44.png" alt="Large wheat farm with modern harvesting equipment in Midwest USA" class="w-full h-full object-cover">
+                    <div class="absolute top-4 right-4 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                        Verified
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-1">Green Fields Inc.</h3>
+                            <p class="text-gray-600 mb-3">Chicago, USA</p>
+                        </div>
+                        <div class="flex items-center bg-yellow-50 px-2 py-1 rounded">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            <span class="ml-1 text-yellow-700 font-medium">4.8</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 my-3">
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Wheat</span>
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Corn</span>
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Organic</span>
+                    </div>
+                    <p class="text-gray-700 mb-4">Specializing in premium organic wheat and corn production with sustainable farming practices since 1995.</p>
+                    <div class="flex justify-between items-center">
+                        <a href="#" class="text-green-600 font-medium hover:text-green-800">View Details →</a>
+                        <button class="text-gray-400 hover:text-gray-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Distributor Card 2 -->
+            <div class="distributor-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+                <div class="relative h-48 bg-gray-100">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7ec9a85d-0204-46c3-bb3c-12e9563afac2.png" alt="Vast orchard with fruit trees in sunny California landscape" class="w-full h-full object-cover">
+                    <div class="absolute top-4 right-4 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                        Verified
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-1">Sunny Valley Farms</h3>
+                            <p class="text-gray-600 mb-3">California, USA</p>
+                        </div>
+                        <div class="flex items-center bg-yellow-50 px-2 py-1 rounded">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            <span class="ml-1 text-yellow-700 font-medium">4.9</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 my-3">
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Fruits</span>
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Vegetables</span>
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Organic</span>
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Fair Trade</span>
+                    </div>
+                    <p class="text-gray-700 mb-4">Premium organic fruits and vegetables from California's most fertile valleys, family-owned since 1982.</p>
+                    <div class="flex justify-between items-center">
+                        <a href="#" class="text-green-600 font-medium hover:text-green-800">View Details →</a>
+                        <button class="text-gray-400 hover:text-gray-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Distributor Card 3 -->
+            <div class="distributor-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+                <div class="relative h-48 bg-gray-100">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c03d4347-2b52-43f3-9f76-c48bcca7234a.png" alt="Harvested rice fields with golden grains in Southeast Asia" class="w-full h-full object-cover">
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-1">Golden Grain Coop</h3>
+                            <p class="text-gray-600 mb-3">Bangkok, Thailand</p>
+                        </div>
+                        <div class="flex items-center bg-yellow-50 px-2 py-1 rounded">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            <span class="ml-1 text-yellow-700 font-medium">4.5</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 my-3">
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Rice</span>
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Non-GMO</span>
+                    </div>
+                    <p class="text-gray-700 mb-4">A cooperative of 150+ small rice farmers producing high-quality jasmine and basmati rice for global markets.</p>
+                    <div class="flex justify-between items-center">
+                        <a href="#" class="text-green-600 font-medium hover:text-green-800">View Details →</a>
+                        <button class="text-gray-400 hover:text-gray-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map Section -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden mb-12">
+            <div class="p-6 border-b border

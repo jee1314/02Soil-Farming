@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Soil Farming Agent</title>
+    <style>
+      :root {
+        --primary: #2e7d32;
+        --primary-light: #60ad5e;
+        --primary-dark: #005005;
+        --secondary: #ffd600;
+        --dark: #263238;
+        --light: #f5f5f5;
+        --text: #424242;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: var(--light);
+        color: var(--text);
+        line-height: 1.6;
+      }
+
+      header {
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: white;
+        padding: 1rem 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+      }
+
+      .logo {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: white;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+      }
+
+      .logo i {
+        margin-right: 0.5rem;
+        font-size: 2rem;
+      }
+
+      .nav-links {
+        display: flex;
+        list-style: none;
+      }
+
+      .nav-links li {
+        margin-left: 2rem;
+      }
+
+      .nav-links a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .nav-links a:hover {
+        color: var(--secondary);
+      }
+
+      .hero {
+        padding: 5rem 0;
+        text-align: center;
+        background: url("https://placehold.co/1920x1080") no-repeat center
+          center/cover;
+        color: white;
+        position: relative;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero h1 {
+        font-size: 3.5rem;
+        margin-bottom: 1.5rem;
+        font-weight: 800;
+      }
+
+      .hero p {
+        font-size: 1.2rem;
+        max-width: 800px;
+        margin: 0 auto 2rem;
+      }
+
+      .btn {
+        display: inline-block;
+        background-color: var(--secondary);
+        color: var(--dark);
+        padding: 0.8rem 2rem;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        background-color: #ffc107;
+      }
+
+      .features {
+        padding: 5rem 0;
+        background-color: white;
+      }
+
+      .section-title {
+        text-align: center;
+        margin-bottom: 3rem;
+        color: var(--primary-dark);
+      }
+
+      .section-title h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        position: relative;
+        display: inline-block;
+      }
+
+      .section-title h2::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 4px;
+        background-color: var(--secondary);
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+
+      .feature-card {
+        background-color: var(--light);
+        border-radius: 10px;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1.5rem;
+        color: var(--primary);
+      }
+
+      .feature-card h3 {
+        margin-bottom: 1rem;
+        color: var(--primary-dark);
+      }
+
+      .analytics {
+        padding: 5rem 0;
+        background-color: var(--light);
+      }
+
+      .analytics-content {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 3rem;
+      }
+
+      .analytics-text {
+        flex: 1;
+        min-width: 300px;
+      }
+
+      .analytics-text h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        color: var(--primary-dark);
+      }
+
+      .analytics-image {
+        flex: 1;
+        min-width: 300px;
+      }
+
+      .analytics-image img {
+        width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .testimonials {
+        padding: 5rem 0;
+        background-color: white;
+      }
+
+      .testimonial-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+
+      .testimonial-card {
+        background-color: var(--light);
+        border-radius: 10px;
+        padding: 2rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        position: relative;
+      }
+
+      .testimonial-card::before {
+        content: '"';
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        font-size: 4rem;
+        color: rgba(0, 0, 0, 0.1);
+        font-family: serif;
+      }
+
+      .testimonial-card p {
+        margin-bottom: 1.5rem;
+        font-style: italic;
+        position: relative;
+        z-index: 1;
+      }
+
+      .testimonial-author {
+        display: flex;
+        align-items: center;
+      }
+
+      .testimonial-author img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 1rem;
+      }
+
+      .author-info h4 {
+        margin-bottom: 0.3rem;
+        color: var(--primary-dark);
+      }
+
+      .author-info p {
+        font-size: 0.9rem;
+        color: var(--text);
+        opacity: 0.8;
+        font-style: normal;
+      }
+
+      footer {
+        background-color: var(--dark);
+        color: white;
+        padding: 3rem 0 1rem;
+      }
+
+      .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .footer-column h3 {
+        margin-bottom: 1.5rem;
+        color: var(--secondary);
+      }
+
+      .footer-column ul {
+        list-style: none;
+      }
+
+      .footer-column ul li {
+        margin-bottom: 0.8rem;
+      }
+
+      .footer-column ul li a {
+        color: white;
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+
+      .footer-column ul li a:hover {
+        color: var(--secondary);
+        padding-left: 5px;
+      }
+
+      .social-links {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .social-links a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        color: white;
+        transition: all 0.3s ease;
+      }
+
+      .social-links a:hover {
+        background-color: var(--secondary);
+        color: var(--dark);
+      }
+
+      .copyright {
+        text-align: center;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+
+        .nav-links {
+          display: none;
+        }
+
+        .analytics-content {
+          flex-direction: column;
+        }
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <nav>
+          <a href="agriculture.jpeg" class="logo">
+            <i class="fas fa-seedling"></i>
+            Soil Farming Agent
+          </a>
+          <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="login.html">login</a></li>
+            <li><a href="contactAbout.html">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-content container">
+        <h1>Revolutionizing Soil Farming Agent</h1>
+        <p>
+          Our advanced soil farming agent uses artificial intelligence to
+          analyze, monitor, and optimize your soil health for maximum crop yield
+          and sustainability.
+        </p>
+        <a href="index.html" class="btn">Get Started Today</a>
+      </div>
+    </section>
+
+    <section class="features">
+      <div class="container">
+        <div class="section-title">
+          <h2>Key Features</h2>
+          <p>
+            Discover how our soil farming agent can transform your agricultural
+            practices
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-microscope"></i>
+            </div>
+            <h3>Soil Analysis</h3>
+            <p>
+              Comprehensive soil testing with detailed nutrient profile and
+              recommendations for optimal corrections.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-water"></i>
+            </div>
+            <h3>Irrigation Optimization</h3>
+            <p>
+              Smart algorithms that determine the perfect watering schedule
+              based on soil moisture and weather patterns.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-leaf"></i>
+            </div>
+            <h3>Crop Rotation Planner</h3>
+            <p>
+              suggestions for crop rotation to maintain soil fertility and
+              prevent disease buildup.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <h3>Yield Prediction</h3>
+            <p>
+              Accurate forecasts of crop yields based on current soil conditions
+              and historical data analysis.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-bug"></i>
+            </div>
+            <h3>Pest Management</h3>
+            <p>
+              Early detection and management strategies for soil-borne pests
+              based on microbial activity analysis.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-robot"></i>
+            </div>
+            <h3>Automated Reporting</h3>
+            <p>
+              Regular automated reports with actionable insights and progress
+              tracking for your soil health.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="analytics">
+      <div class="container">
+        <div class="analytics-content">
+          <div class="analytics-text">
+            <h2>Real-time Soil Analytics</h2>
+            <p>
+              Our advanced sensors and algorithms provide continuous monitoring
+              of your soil's vital parameters including nutrient levels, pH
+              balance, moisture content, and microbial activity.
+            </p>
+            <p>
+              The system learns from your specific growing conditions, providing
+              increasingly accurate recommendations tailored to your farm's
+              unique ecosystem.
+            </p>
+            <a href="#" class="btn">Learn More About Our Technology</a>
+          </div>
+          <div class="analytics-image">
+            <img
+              src="realtime.jpeg"
+              alt="Digital dashboard showing soil analytics with charts for pH levels, moisture content, and nutrient balance"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="testimonials">
+      <div class="container">
+        <div class="section-title">
+          <h2>What Farmers Say</h2>
+          <p>
+            Hear from agricultural professionals who have transformed their
+            operations with our soil farming agent
+          </p>
+        </div>
+
+        <div class="testimonial-grid">
+          <div class="testimonial-card">
+            <p>
+              This soil agent has completely changed how we manage our fields.
+              The nutrient recommendations have increased our yield by 28% in
+              just one season.
+            </p>
+            <div class="testimonial-author">
+              <img
+                src="crops.jpeg"
+                alt="Portrait of a middle-aged male farmer with a beard wearing a cap and smiling"
+              />
+              <div class="author-info">
+                <h4>John</h4>
+                <p>Corn Farmer, khandwa</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <p>
+              As an organic farm, soil health is everything to us. The AI's
+              recommendations for cover crops and compost applications have been
+              game-changing.
+            </p>
+            <div class="testimonial-author">
+              <img
+                src="cropss.jpeg"
+                alt="Portrait of a female farmer in her 40s wearing a sunhat and holding vegetables"
+              />
+              <div class="author-info">
+                <h4>Maria Gonzalez</h4>
+                <p>Organic Vegetable Farm, India</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <p>
+              The automated irrigation scheduling has saved us thousands in
+              water costs while actually improving our crop quality. Worth every
+              penny.
+            </p>
+            <div class="testimonial-author">
+              <img
+                src="agriculture.jpeg"
+                alt="Portrait of an older farmer with weathered skin and a plaid shirt looking at the camera seriously"
+              />
+              <div class="author-info">
+                <h4>Reena</h4>
+                <p>Vineyard Owner, Oregon</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-column">
+            <h3>SOIL FARMING AGENT</h3>
+            <p>
+              Revolutionizing agriculture through artificial intelligence and
+              soil science for a more sustainable future.
+            </p>
+            <div class="social-links">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+          </div>
+
+          <div class="footer-column">
+            <h3>Quick Links</h3>
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="contactAbout.html">Contact</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-column">
+            <h3>Resources</h3>
+            <ul>
+              <li><a href="#">Documentation</a></li>
+              <li><a href="#">FAQs</a></li>
+              <li><a href="#">Case Studies</a></li>
+              <li><a href="#">Research Papers</a></li>
+              <li><a href="#">Agriculture News</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-column">
+            <h3>Contact Us</h3>
+            <ul>
+              <li>
+                <i class="fas fa-map-marker-alt"></i> 123 Farm Tech Lane, Agro
+                Valley
+              </li>
+              <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+              <li><i class="fas fa-envelope"></i> info@agrosoil.ai</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="copyright">
+          <p>
+            &copy; 2025 Soil Farming Agent. All rights reserved. |
+            <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

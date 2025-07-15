@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SoilFarming Agent Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-color: #4caf50;
+        --secondary-color: #388e3c;
+        --accent-color: #8bc34a;
+        --dark-color: #2e7d32;
+        --light-color: #c8e6c9;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f5f5;
+        min-height: 100vh;
+      }
+
+      .auth-container {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .auth-container:hover {
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+      }
+
+      .input-field {
+        position: relative;
+        margin-bottom: 1.5rem;
+      }
+
+      .input-field input {
+        width: 100%;
+        padding: 15px 20px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+      }
+
+      .input-field input:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+      }
+
+      .btn-primary {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .btn-primary:hover {
+        background-color: var(--dark-color);
+        transform: translateY(-2px);
+      }
+
+      .btn-secondary {
+        background-color: transparent;
+        color: var(--dark-color);
+        border: 2px solid var(--dark-color);
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .btn-secondary:hover {
+        background-color: var(--dark-color);
+        color: white;
+      }
+
+      .hero-image {
+        position: relative;
+        height: 300px;
+        width: 100%;
+        overflow: hidden;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+      }
+
+      .hero-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .dashboard-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+      }
+
+      .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-item {
+        padding: 12px 20px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .nav-item:hover {
+        background-color: var(--light-color);
+      }
+
+      .active-nav {
+        background-color: var(--light-color);
+        color: var(--dark-color);
+        font-weight: 600;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .auth-container {
+          width: 90%;
+          margin: 0 auto;
+        }
+
+        .hero-image {
+          height: 200px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!-- Public Navigation (Visible when logged out) -->
+      <nav
+        id="public-nav"
+        class="bg-white shadow-md py-4 px-6 flex justify-between items-center"
+      >
+        <div class="flex items-center">
+          <div
+            class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3"
+          >
+            <i class="fas fa-leaf text-green-600"></i>
+          </div>
+          <h1 class="text-xl font-bold text-green-700">SoilFarming Agent</h1>
+        </div>
+        <div>
+          <button id="login-btn" class="btn-secondary mr-2">Login</button>
+          <button id="register-btn" class="btn-primary">Register</button>
+        </div>
+      </nav>
+
+      <!-- Private Navigation (Visible when logged in) -->
+      <nav
+        id="private-nav"
+        class="bg-white shadow-md py-4 px-6 flex justify-between items-center hidden"
+      >
+        <div class="flex items-center">
+          <div
+            class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3"
+          >
+            <i class="fas fa-leaf text-green-600"></i>
+          </div>
+          <h1 class="text-xl font-bold text-green-700">SoilFarming Agent</h1>
+        </div>
+        <div class="flex items-center">
+          <span id="user-email" class="mr-4 text-gray-600"
+            >agent@soilfarm.com</span
+          >
+          <button id="logout-btn" class="btn-secondary">Logout</button>
+        </div>
+      </nav>
+
+      <!-- Login Section -->
+      <section id="login-section" class="py-12 px-4">
+        <div class="max-w-md mx-auto auth-container p-8">
+          <h2 class="text-2xl font-bold text-center mb-8 text-gray-800">
+            Agent Login
+          </h2>
+
+          <div class="hero-image">
+            <img
+              src="agriculture.jpeg"
+              alt="Agricultural field with rich dark soil being prepared for planting, showcasing fertile farmland ready for cultivation"
+            />
+          </div>
+
+          <form id="login-form">
+            <div class="input-field">
+              <input
+                type="email"
+                id="login-email"
+                placeholder="Email Address"
+                required
+              />
+            </div>
+            <div class="input-field">
+              <input
+                type="password"
+                id="login-password"
+                placeholder="Password"
+                required
+              />
+            </div>
+            <div class="flex justify-between items-center mb-6">
+              <div class="flex items-center">
+                <input type="checkbox" id="remember-me" class="mr-2" />
+                <label for="remember-me" class="text-sm text-gray-600"
+                  >Remember me</label
+                >
+              </div>
+              <a href="#" class="text-sm text-green-600 hover:underline"
+                >Forgot password?</a
+              >
+            </div>
+            <button type="submit" class="btn-primary w-full">Login</button>
+          </form>
+
+          <div class="text-center mt-6">
+            <p class="text-gray-600">
+              Don't have an account?
+              <a href="login.html" id="switch-to-register" class="btn"
+                >Register</a
+              >
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Register Section -->
+      <section id="register-section" class="py-12 px-4 hidden">
+        <div class="max-w-md mx-auto auth-container p-8">
+          <h2 class="text-2xl font-bold text-center mb-8 text-gray-800">
+            Agent Registration
+          </h2>
+
+          <div class="hero-image">
+            <img
+              src="agriculture.jpeg"
+              alt="Close-up of hands holding rich, dark soil with visible organic matter and good moisture content"
+            />
+          </div>
+
+          <form id="register-form">
+            <div class="input-field">
+              <input
+                type="text"
+                id="register-name"
+                placeholder="Full Name"
+                required
+              />
+            </div>
+            <div class="input-field">
+              <input
+                type="email"
+                id="register-email"
+                placeholder="Email Address"
+                required
+              />
+            </div>
+            <div class="input-field">
+              <input
+                type="tel"
+                id="register-phone"
+                placeholder="Phone Number"
+                required
+              />
+            </div>
+            <div class="input-field">
+              <input
+                type="password"
+                id="register-password"
+                placeholder="Password"
+                required
+              />
+            </div>
+            <div class="input-field">
+              <input
+                type="password"
+                id="register-confirm-password"
+                placeholder="Confirm Password"
+                required
+              />
+            </div>
+            <div class="flex items-center mb-6">
+              <input type="checkbox" id="terms" class="mr-2" required />
+              <label for="terms" class="text-sm text-gray-600"
+                >I agree to the
+                <a href="#" class="text-green-600 hover:underline"
+                  >Terms & Conditions</a
+                ></label
+              >
+            </div>
+            <button type="submit" class="btn-primary w-full">Register</button>
+          </form>
+
+          <div class="text-center mt-6">
+            <p class="text-gray-600">
+              Already have an account?
+              <a href="login.html" id="switch-to-login" class="btn">Login</a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Dashboard Section -->
+      <section id="dashboard-section" class="py-8 px-4 hidden">
+        <div class="max-w-6xl mx-auto">
+          <h2 class="text-2xl font-bold mb-8 text-gray-800">Agent Dashboard</h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Soil Analysis Card -->
+            <div class="dashboard-card">
+              <div class="flex items-center mb-4">
+                <div
+                  class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mr-3"
+                >
+                  <i class="fas fa-flask text-green-600"></i>
+                </div>
+                <h3 class="text-lg font-semibold">Soil Analysis</h3>
+              </div>
+              <p class="text-gray-600 mb-4">
+                View and manage soil test results for your clients.
+              </p>
+              <button class="btn-secondary w-full">View Reports</button>
+            </div>
+
+            <!-- Client Management Card -->
+            <div class="dashboard-card">
+              <div class="flex items-center mb-4">
+                <div
+                  class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-3"
+                >
+                  <i class="fas fa-users text-blue-600"></i>
+                </div>
+                <h3 class="text-lg font-semibold">Client Management</h3>
+              </div>
+              <p class="text-gray-600 mb-4">
+                Manage your client portfolio and track farms.
+              </p>
+              <button class="btn-secondary w-full">Manage Clients</button>
+            </div>
+
+            <!-- Recommendations Card -->
+            <div class="dashboard-card">
+              <div class="flex items-center mb-4">
+                <div
+                  class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center mr-3"
+                >
+                  <i class="fas fa-lightbulb text-orange-600"></i>
+                </div>
+                <h3 class="text-lg font-semibold">Soil Recommendations</h3>
+              </div>
+              <p class="text-gray-600 mb-4">
+                Generate customized soil improvement plans.
+              </p>
+              <button class="btn-secondary w-full">Create Plan</button>
+            </div>
+          </div>
+
+          <!-- Recent Activity Section -->
+          <div class="mt-12">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">
+              Recent Activity
+            </h3>
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <div class="border-b pb-4 mb-4">
+                <div class="flex items-center">
+                  <div
+                    class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center mr-3"
+                  >
+                    <i class="fas fa-file-alt text-yellow-500"></i>
+                  </div>
+                  <div>
+                    <p class="font-medium">
+                      New soil analysis report generated
+                    </p>
+                    <p class="text-sm text-gray-500">
+                      Green Valley Farm | 2 hours ago
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="border-b pb-4 mb-4">
+                <div class="flex items-center">
+                  <div
+                    class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3"
+                  >
+                    <i class="fas fa-user-check text-blue-500"></i>
+                  </div>
+                  <div>
+                    <p class="font-medium">New client added</p>
+                    <p class="text-sm text-gray-500">
+                      Sunrise Agribusiness | Yesterday
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="flex items-center">
+                  <div
+                    class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-3"
+                  >
+                    <i class="fas fa-chart-line text-green-500"></i>
+                  </div>
+                  <div>
+                    <p class="font-medium">Soil health improvement noticed</p>
+                    <p class="text-sm text-gray-500">
+                      Riverbend Organics | 3 days ago
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Status Messages -->
+      <div
+        id="status-message"
+        class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg hidden"
+      >
+        <span id="status-text"></span>
+      </div>
+    </div>
+
+    <script>
+      // DOM Elements
+      const publicNav = document.getElementById("public-nav");
+      const privateNav = document.getElementById("private-nav");
+      const loginSection = document.getElementById("login-section");
+      const registerSection = document.getElementById("register-section");
+      const dashboardSection = document.getElementById("dashboard-section");
+      const loginBtn = document.getElementById("login-btn");
+      const registerBtn = document.getElementById("register-btn");
+      const logoutBtn = document.getElementById("logout-btn");
+      const switchToRegister = document.getElementById("switch-to-register");
+      const switchToLogin = document.getElementById("switch-to-login");
+      const loginForm = document.getElementById("login-form");
+      const registerForm = document.getElementById("register-form");
+      const statusMessage = document.getElementById("status-message");
+      const statusText = document.getElementById("status-text");
+
+      // Simulated user data
+      let users = [];
+      let currentUser = null;
+
+      // Navigation Functions
+      function showLoginSection() {
+        loginSection.classList.remove("hidden");
+        registerSection.classList.add("hidden");
+        dashboardSection.classList.add("hidden");
+        publicNav.classList.remove("hidden");
+        privateNav.classList.add("hidden");
+      }
+
+      function showRegisterSection() {
+        loginSection.classList.add("hidden");
+        registerSection.classList.remove("hidden");
+        dashboardSection.classList.add("hidden");
+        publicNav.classList.remove("hidden");
+        privateNav.classList.add("hidden");
+      }
+
+      function showDashboardSection() {
+        loginSection.classList.add("hidden");
+        registerSection.classList.add("hidden");
+        dashboardSection.classList.remove("hidden");
+        publicNav.classList.add("hidden");
+        privateNav.classList.remove("hidden");
+
+        if (currentUser) {
+          document.getElementById("user-email").textContent = currentUser.email;
+        }
+      }
+
+      function showStatusMessage(message, isError = false) {
+        statusText.textContent = message;
+        statusMessage.classList.remove("hidden");
+        statusMessage.classList.remove("bg-red-500");
+        statusMessage.classList.remove("bg-green-500");
+
+        if (isError) {
+          statusMessage.classList.add("bg-red-500");
+        } else {
+          statusMessage.classList.add("bg-green-500");
+        }
+
+        setTimeout(() => {
+          statusMessage.classList.add("hidden");
+        }, 3000);
+      }
+
+      // Event Listeners
+      loginBtn.addEventListener("click", showLoginSection);
+      registerBtn.addEventListener("click", showRegisterSection);
+      switchToRegister.addEventListener("click", (e) => {
+        e.preventDefault();
+        showRegisterSection();
+      });
+      switchToLogin.addEventListener("click", (e) => {
+        e.preventDefault();
+        showLoginSection();
+      });
+
+      logoutBtn.addEventListener("click", () => {
+        currentUser = null;
+        showLoginSection();
+        showStatusMessage("You have been logged out successfully.");
+      });
+
+      loginForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const email = document.getElementById("login-email").value;
+        const password = document.getElementById("login-password").value;
+        const rememberMe = document.getElementById("remember-me").checked;
+
+        // Simulate login validation
+        const user = users.find(
+          (u) => u.email === email && u.password === password
+        );
+
+        if (user) {
+          currentUser = user;
+          showDashboardSection();
+          showStatusMessage("Login successful! Welcome back.");
+
+          if (rememberMe) {
+            localStorage.setItem("rememberedUser", JSON.stringify({ email }));
+          }
+        } else {
+          showStatusMessage(
+            "Invalid email or password. Please try again.",
+            true
+          );
+        }
+      });
+
+      registerForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("register-name").value;
+        const email = document.getElementById("register-email").value;
+        const phone = document.getElementById("register-phone").value;
+        const password = document.getElementById("register-password").value;
+        const confirmPassword = document.getElementById(
+          "register-confirm-password"
+        ).value;
+        const terms = document.getElementById("terms").checked;
+
+        // Validate form
+        if (password !== confirmPassword) {
+          showStatusMessage("Passwords do not match. Please try again.", true);
+          return;
+        }
+
+        if (!terms) {
+          showStatusMessage(
+            "You must agree to the terms and conditions.",
+            true
+          );
+          return;
+        }
+
+        // Check if user already exists
+        if (users.some((u) => u.email === email)) {
+          showStatusMessage("An account with this email already exists.", true);
+          return;
+        }
+
+        // Create new user
+        const newUser = {
+          name,
+          email,
+          phone,
+          password,
+        };
+
+        users.push(newUser);
+        currentUser = newUser;
+
+        showDashboardSection();
+        showStatusMessage(
+          "Registration successful! Welcome to SoilFarming Agent."
+        );
+
+        // Clear form
+        registerForm.reset();
+      });
+
+      // Check for remembered user on page load
+      document.addEventListener("DOMContentLoaded", () => {
+        const rememberedUser = localStorage.getItem("rememberedUser");
+
+        if (rememberedUser) {
+          const { email } = JSON.parse(rememberedUser);
+          document.getElementById("login-email").value = email;
+          document.getElementById("remember-me").checked = true;
+        }
+
+        showLoginSection();
+      });
+    </script>
+  </body>
+</html>
